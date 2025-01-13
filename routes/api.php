@@ -20,3 +20,5 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/users', [AuthController::class, 'users']);
     });
 });
+
+// TEst what i'm doing
