@@ -13,7 +13,7 @@ class ClientController extends Controller
         
         // Les administrateurs voient tous les clients
         if ($user->isAdmin()) {
-            $clients = Client::with('user')->get();
+            $clients = Client::with('user')->latest()->get();
         } else {
             // Les enquêteurs ne voient que leurs clients
             $clients = $user->clients;
