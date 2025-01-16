@@ -69,4 +69,9 @@ class AuthController extends Controller
 
         return response()->json(['message' => 'Déconnecté avec succès']);
     }
+
+
+    public function users(){
+        return User::all();
+    }
 }
