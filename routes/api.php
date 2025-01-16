@@ -18,6 +18,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Routes réservées aux administrateurs
     Route::middleware('role:ADMINISTRATEUR')->group(function () {
         Route::get('/users', [AuthController::class, 'users']);
+        Route::post(uri: '/reports', action: [ClientController::class, 'report']);
     });
 });
 
