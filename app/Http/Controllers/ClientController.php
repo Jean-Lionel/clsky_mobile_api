@@ -25,9 +25,7 @@ class ClientController extends Controller
         // Initialisation de la requête de base
         $query = Client::with('user');
         // Application de filtres conditionnels basés sur les paramètres de la requête
-        if ($request->has('status')) {
-            $query->where('status', $request->status);
-        } 
+     
         if ($request->has('name')) {
             $query->where('full_name', 'like', '%' . $request->name . '%');
         }
@@ -50,7 +48,8 @@ class ClientController extends Controller
             $query->where('longitude', $request->longitude);
         }
         
-        if ($request->has('user_id')) {
+        if ($request->has('user_id') && intVal($request->user_id) ) {
+
             $query->where('user_id', $request->user_id);
         }
         // Récupérer les clients avec tri par ordre décroissant
