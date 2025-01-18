@@ -15,6 +15,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('role:ENQUETEUR,ADMINISTRATEUR')->group(function () {
         Route::apiResource('clients', ClientController::class);
     });
+   // Route::get('/users-search', [AuthController::class, 'users']);
+       
     // Routes réservées aux administrateurs
     Route::middleware('role:ADMINISTRATEUR')->group(function () {
         Route::get('/users', [AuthController::class, 'users']);

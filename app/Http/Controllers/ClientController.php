@@ -21,6 +21,18 @@ class ClientController extends Controller
     }
     
     public function report(Request $request){
+
+        $validated = $request->validate([
+            'full_name' => 'required|string',
+            'phone_number' => 'required|numeric|unique:clients',
+            'market' => 'required|string',
+            'province' => 'required|string',
+            'description' => 'nullable|string',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
+
+
+        ]);
         
         // Initialisation de la requête de base
         $query = Client::with('user');
@@ -49,7 +61,6 @@ class ClientController extends Controller
         }
         
         if ($request->has('user_id') && intVal($request->user_id) ) {
-
             $query->where('user_id', $request->user_id);
         }
         // Récupérer les clients avec tri par ordre décroissant
