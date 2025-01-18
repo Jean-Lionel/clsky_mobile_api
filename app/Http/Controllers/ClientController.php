@@ -24,7 +24,9 @@ class ClientController extends Controller
 
         $validated = $request->validate([
             'full_name' => 'required|string',
-            'phone_number' => 'required|numeric|unique:clients',
+            // validate unique:table,column,except,id
+            /* validate unique phone_number unique on client */
+            "phone_number" => 'required|unique:clients,phone_number',
             'market' => 'required|string',
             'province' => 'required|string',
             'description' => 'nullable|string',
