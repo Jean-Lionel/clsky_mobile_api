@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use App\Models\ClientHistory;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,5 +21,10 @@ class Client extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function clientHistory(){
+
+        return $this->hasMany(ClientHistory::class);
     }
 }

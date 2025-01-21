@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use App\Models\ClientHistory;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -12,29 +13,19 @@ class ClientController extends Controller
         $user = auth()->user();
         // Les administrateurs voient tous les clients
         if ($user->isAdmin()) {
-            $clients = Client::with('user')->latest()->paginate();
+            $clients = Client::with(['user','clientHistory'])
+            
+            ->latest()->paginate();
         } else {
             // Les enquêteurs ne voient que leurs clients
-            $clients = Client::with('user')->where('user_id',$user->id )->latest()->paginate();
+            $clients = Client::with(['user','clientHistory'])->where('user_id',$user->id )->latest()->paginate();
         } 
         return response()->json($clients);
     }
     
     public function report(Request $request){
 
-        $validated = $request->validate([
-            'full_name' => 'required|string',
-            // validate unique:table,column,except,id
-            /* validate unique phone_number unique on client */
-            "phone_number" => 'required|unique:clients,phone_number',
-            'market' => 'required|string',
-            'province' => 'required|string',
-            'description' => 'nullable|string',
-            'latitude' => 'nullable|numeric',
-            'longitude' => 'nullable|numeric',
-
-
-        ]);
+      
         
         // Initialisation de la requête de base
         $query = Client::with('user');
@@ -76,7 +67,7 @@ class ClientController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'phone_number' => 'required|string',
+            'phone_number' => 'required|integer|unique:clients,phone_number',
             'full_name' => 'required|string',
             'market' => 'required|string',
             'province' => 'required|string',
@@ -91,16 +82,16 @@ class ClientController extends Controller
     }
     public function show(Client $client)
     {
-        $this->authorize('view', $client);
+       // $this->authorize('view', $client);
         return response()->json($client);
     }
     
     public function update(Request $request, Client $client)
     {
-        $this->authorize('update', $client);
+      //  $this->authorize('update', $client);
         
         $validated = $request->validate([
-            'phone_number' => 'required|string',
+            'phone_number' => 'required|string|unique:clients,phone_number,except,id',
             'full_name' => 'required|string',
             'market' => 'required|string',
             'province' => 'required|string',
@@ -108,10 +99,19 @@ class ClientController extends Controller
             'latitude' => 'nullable|numeric',
             'longitude' => 'nullable|numeric',
         ]);
+       $client_history =  ClientHistory::create(attributes:
         
-        $client->update($validated);
+        array_merge($client->toArray() , [
+            'client_id' => $client->id,
+            'user_id' => auth()->user()->id,
+        ],
+
+        )
+    );
         
-        return response()->json($client);
+    $client->update($validated);
+        
+        return response()->json(data: $client_history);
     }
     
     public function destroy(Client $client)
