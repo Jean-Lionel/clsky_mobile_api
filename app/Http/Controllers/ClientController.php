@@ -23,6 +23,38 @@ class ClientController extends Controller
         return response()->json($clients);
     }
     
+
+    public function accepte($id){
+
+        try{
+            $history = ClientHistory::find($id);
+            $client = Client::find( $history->client_id);
+            $history->used = "ACCEPTED";
+            $history->save();
+
+        }catch(\Exception $e){
+            return $e->getMessage();
+        }
+        return response()->json([
+            "message" => "ACCEPTED"
+        ]);
+        
+    }
+    public function refuse($id){
+
+        try{
+            $history = ClientHistory::find($id);
+            $client = Client::find( $history->client_id);
+            $client->update( $history->toArray());
+            $history->used = "REFUSE";
+            $history->save();
+        }catch(\Exception $e){
+            return $e->getMessage();
+        }
+        return response()->json([
+            "message" => "REFUSE"
+        ]);
+    }
     public function report(Request $request){
 
       
@@ -91,7 +123,7 @@ class ClientController extends Controller
       //  $this->authorize('update', $client);
         
         $validated = $request->validate([
-            'phone_number' => 'required|string|unique:clients,phone_number,except,id',
+            'phone_number' => 'required|string',
             'full_name' => 'required|string',
             'market' => 'required|string',
             'province' => 'required|string',

@@ -21,6 +21,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('role:ADMINISTRATEUR')->group(function () {
         Route::get('/users', [AuthController::class, 'users']);
         Route::post(uri: '/reports', action: [ClientController::class, 'report']);
+        Route::get(uri: '/accepte/{id}', action: [ClientController::class, 'accepte']);
+        Route::get(uri: '/refuse/{id}', action: [ClientController::class, 'refuse']);
     });
 });
 
