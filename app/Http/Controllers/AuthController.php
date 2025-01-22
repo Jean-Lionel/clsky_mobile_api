@@ -74,4 +74,17 @@ class AuthController extends Controller
     public function users(){
         return User::all();
     }
+
+    public function  destroy($id){
+        $user = User::find($id);
+
+        if(auth()->user()->id === $user->id){
+            throw new \Exception("Error de suppression vous ne pouvez supprimer votre propre compte ");
+        }
+        //
+        $user->delete();
+        return response()->json([
+            "message" => "Suppression réussi "
+        ]);
+    }
 }

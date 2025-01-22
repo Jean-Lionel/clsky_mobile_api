@@ -20,6 +20,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Routes réservées aux administrateurs
     Route::middleware('role:ADMINISTRATEUR')->group(function () {
         Route::get('/users', [AuthController::class, 'users']);
+        Route::delete('/users/{id}', [AuthController::class, 'destroy']);
         Route::post(uri: '/reports', action: [ClientController::class, 'report']);
         Route::get(uri: '/accepte/{id}', action: [ClientController::class, 'accepte']);
         Route::get(uri: '/refuse/{id}', action: [ClientController::class, 'refuse']);
