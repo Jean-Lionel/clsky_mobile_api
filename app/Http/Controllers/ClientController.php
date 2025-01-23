@@ -14,11 +14,16 @@ class ClientController extends Controller
         // Les administrateurs voient tous les clients
         if ($user->isAdmin()) {
             $clients = Client::with(['user','clientHistory'])
-            
-            ->latest()->paginate();
+           
+           ->latest() 
+            ->paginate();
         } else {
             // Les enquêteurs ne voient que leurs clients
-            $clients = Client::with(['user','clientHistory'])->where('user_id',$user->id )->latest()->paginate();
+            $clients = Client::with(['user','clientHistory'])
+            ->where('user_id',$user->id )
+            ->latest()
+            
+            ->paginate();
         } 
         return response()->json($clients);
     }
@@ -99,7 +104,7 @@ class ClientController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'phone_number' => 'required|integer|unique:clients,phone_number',
+            'phone_number' => 'required|string|unique:clients,phone_number',
             'full_name' => 'required|string',
             'market' => 'required|string',
             'province' => 'required|string',

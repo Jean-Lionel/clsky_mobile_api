@@ -17,6 +17,7 @@ class Client extends Model
         'longitude',
         'user_id'
     ];
+    protected $appends = ['totalModifications'];
 
     public function user()
     {
@@ -25,6 +26,10 @@ class Client extends Model
 
     public function clientHistory(){
 
-        return $this->hasMany(ClientHistory::class);
+        return $this->hasMany(ClientHistory::class)->whereNull('used');
+    }
+
+    public function getTotalModificationsAttribute(){
+        return $this->clientHistory->count();
     }
 }
