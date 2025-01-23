@@ -11,19 +11,15 @@ class ClientController extends Controller
     public function index()
     {
         $user = auth()->user();
+        $clients = [];
         // Les administrateurs voient tous les clients
         if ($user->isAdmin()) {
             $clients = Client::with(['user','clientHistory'])
-           
-           ->latest() 
-            ->paginate();
+            
+            ->latest()->paginate();
         } else {
             // Les enquêteurs ne voient que leurs clients
-            $clients = Client::with(['user','clientHistory'])
-            ->where('user_id',$user->id )
-            ->latest()
-            
-            ->paginate();
+            $clients = Client::with(['user','clientHistory'])->where('user_id',$user->id )->latest()->paginate();
         } 
         return response()->json($clients);
     }
