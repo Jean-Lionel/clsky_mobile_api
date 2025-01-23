@@ -12,7 +12,7 @@ class ClientController extends Controller
     {
         $user = auth()->user();
         $clients = [];
-        return response()->json($clients);
+       // return response()->json($clients);
         // Les administrateurs voient tous les clients
         if ($user->isAdmin()) {
             $clients = Client::with(['user','clientHistory'])
