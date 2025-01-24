@@ -27,4 +27,5 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 });
 
+Route::middleware('auth:sanctum')->post('/change-password', [AuthController::class, 'changePassword']);
 // TEst what i'm doing

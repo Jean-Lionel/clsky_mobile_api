@@ -87,4 +87,28 @@ class AuthController extends Controller
             "message" => "Suppression réussi "
         ]);
     }
+
+    public function changePassword(Request $request)
+{
+    $request->validate([
+        'current_password' => 'required',
+        'new_password' => 'required|min:8|confirmed',
+    ]);
+
+    $user = auth()->user();
+
+    if (!Hash::check($request->current_password, $user->password)) {
+        return response()->json([
+            'message' => 'Le mot de passe actuel est incorrect'
+        ], 422);
+    }
+
+    $user->update([
+        'password' => Hash::make($request->new_password)
+    ]);
+
+    return response()->json([
+        'message' => 'Mot de passe modifié avec succès'
+    ]);
+}
 }
