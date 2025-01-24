@@ -150,8 +150,10 @@ class ClientController extends Controller
     
     public function destroy(Client $client)
     {
-        $this->authorize('delete', $client);
+        //$this->authorize('delete', $client);
         $client->delete();
-        return response()->json(null, 204);
+        return response()->json([
+            "message" => "deleted success"
+        ], 204);
     }
 }
